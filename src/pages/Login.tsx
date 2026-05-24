@@ -10,11 +10,12 @@ import { Button } from '@/components/ui/Button';
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, isLoading, error, clearError, user } = useAuthStore();
+  const { login, error, clearError, user } = useAuthStore();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const from = (location.state as { from?: Location })?.from?.pathname ?? '/home';
 
@@ -39,9 +40,14 @@ export default function Login() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!validate()) return;
-    const ok = await login({ username: username.trim(), password });
-    if (ok) navigate(from, { replace: true });
+    if (!validate() || isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      const ok = await login({ username: username.trim(), password });
+      if (ok) navigate(from, { replace: true });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -107,11 +113,11 @@ export default function Login() {
             <Button
               type="submit"
               size="lg"
-              loading={isLoading}
-              disabled={isLoading}
+              loading={isSubmitting}
+              disabled={isSubmitting}
               className="w-full"
             >
-              {isLoading ? 'Logging in…' : 'Log In'}
+              {isSubmitting ? 'Logging in…' : 'Log in'}
             </Button>
           </div>
         </form>

@@ -10,12 +10,13 @@ import { GoogleButton, OrDivider } from './Login';
 
 export default function Signup() {
   const navigate = useNavigate();
-  const { signup, isLoading, error, clearError, user } = useAuthStore();
+  const { signup, error, clearError, user } = useAuthStore();
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -42,13 +43,18 @@ export default function Signup() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!validate()) return;
-    const ok = await signup({
-      username: username.trim(),
-      email: email.trim(),
-      password,
-    });
-    if (ok) navigate('/home', { replace: true });
+    if (!validate() || isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      const ok = await signup({
+        username: username.trim(),
+        email: email.trim(),
+        password,
+      });
+      if (ok) navigate('/home', { replace: true });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -115,11 +121,11 @@ export default function Signup() {
             <Button
               type="submit"
               size="lg"
-              loading={isLoading}
-              disabled={isLoading}
+              loading={isSubmitting}
+              disabled={isSubmitting}
               className="w-full"
             >
-              {isLoading ? 'Creating account…' : 'Sign Up'}
+              {isSubmitting ? 'Creating account…' : 'Create account'}
             </Button>
           </div>
         </form>
