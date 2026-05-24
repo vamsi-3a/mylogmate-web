@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { Moon, Sun, User, Lock, LogOut, Check } from 'lucide-react';
+import { User, Lock, LogOut, Check } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
-import { useThemeStore } from '@/store/themeStore';
 import { authApi } from '@/api/auth';
 import { useToast } from '@/components/ui/Toast';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -12,14 +11,13 @@ import { cn } from '@/utils/cn';
 
 export default function Settings() {
   const { user, logout } = useAuthStore();
-  const { isDark, toggle } = useThemeStore();
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 pb-16 space-y-8">
       <PageHeader
         eyebrow="Account"
         title="Settings"
-        subtitle="Manage your profile, security, and preferences."
+        subtitle="Manage your profile and security."
       />
 
       {/* Profile section */}
@@ -33,19 +31,6 @@ export default function Settings() {
           <PasswordForm />
         </SettingsSection>
       )}
-
-      {/* Appearance */}
-      <SettingsSection icon={isDark ? <Moon size={16} /> : <Sun size={16} />} title="Appearance">
-        <div className="flex items-center justify-between py-1">
-          <div>
-            <p className="text-[14px] font-semibold text-ink dark:text-white">Dark mode</p>
-            <p className="text-[12.5px] text-ink-3 mt-0.5">
-              {isDark ? 'Currently using dark theme' : 'Currently using light theme'}
-            </p>
-          </div>
-          <ThemeToggle isDark={isDark} onToggle={toggle} />
-        </div>
-      </SettingsSection>
 
       {/* Sign out */}
       <SettingsSection icon={<LogOut size={16} />} title="Account">
@@ -299,35 +284,5 @@ function PasswordField({
       {error && <p className="text-[12px] text-red-500">{error}</p>}
       {hint && !error && <p className="text-[12px] text-ink-3">{hint}</p>}
     </div>
-  );
-}
-
-// ── Theme Toggle ──────────────────────────────────────────────────────────
-
-function ThemeToggle({ isDark, onToggle }: { isDark: boolean; onToggle: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      className={cn(
-        'relative w-12 h-6 rounded-full transition-colors duration-200',
-        isDark ? 'bg-accent' : 'bg-gray-200 dark:bg-surface-3',
-      )}
-    >
-      <span
-        className={cn(
-          'absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-sm',
-          'flex items-center justify-center transition-transform duration-200',
-          isDark ? 'translate-x-6' : 'translate-x-0',
-        )}
-      >
-        {isDark ? (
-          <Moon size={11} className="text-accent" />
-        ) : (
-          <Sun size={11} className="text-gray-400" />
-        )}
-      </span>
-    </button>
   );
 }

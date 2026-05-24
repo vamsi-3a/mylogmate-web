@@ -29,14 +29,21 @@ export default function RecallMonth() {
     setIsLoading(true);
     setError(null);
 
-    const contextId = contextTab === 'self' ? 'self' : entityId;
+    const params: Parameters<typeof logsApi.list>[0] = {
+      date_start: `${year}-01-01`,
+      date_end: `${year}-12-31`,
+    };
+    if (contextTab === 'self') {
+      params.context_id = 'self';
+    } else if (entityId) {
+      params.context_id = entityId;
+    } else {
+      // "All teammates" or "All projects" view
+      params.context_type = contextTab;
+    }
 
     logsApi
-      .list({
-        context_id: contextId ?? undefined,
-        date_start: `${year}-01-01`,
-        date_end: `${year}-12-31`,
-      })
+      .list(params)
       .then(({ data }) => {
         const counts = new Array(12).fill(0);
         data.forEach((log) => {

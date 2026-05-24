@@ -35,6 +35,9 @@ export interface UpdateLogPayload {
 
 export interface LogListParams {
   context_id?: string;
+  /** Alternative to context_id — restrict to all of the user's
+   *  contexts of this type ('self' | 'team' | 'project') */
+  context_type?: 'self' | 'team' | 'project';
   date_start?: string;
   date_end?: string;
   tag_ids?: string[];
