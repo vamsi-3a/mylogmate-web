@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-white text-ink font-sans dark:bg-[#0F0F0F] dark:text-[#F5F5F5];
+    font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  }
+
+  /* Remove default button styles */
+  button {
+    font-family: inherit;
+  }
+
+  /* Smooth scrolling */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+}
+
+@layer utilities {
+  /* Skeleton shimmer */
+  .skeleton {
+    @apply animate-shimmer rounded-full;
+    background: linear-gradient(90deg, #eef0f2 25%, #f6f7f9 37%, #eef0f2 63%);
+    background-size: 400% 100%;
+  }
+
+  .dark .skeleton {
+    background: linear-gradient(90deg, #262626 25%, #2a2a2a 37%, #262626 63%);
+    background-size: 400% 100%;
+  }
+
+  /* Text wrap */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Letter spacing for headings */
+  .tracking-heading {
+    letter-spacing: -0.022em;
+  }
+
+  .tracking-tight-2 {
+    letter-spacing: -0.014em;
+  }
+
+  /* Tabular numbers for data */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Focus ring consistent with design */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-accent/30 focus:ring-offset-0;
+  }
+
+  /* Card styles */
+  .card-base {
+    @apply bg-white dark:bg-surface-2 border border-gray-200 dark:border-[#2A2A2A] rounded-card-lg;
+  }
+
+  /* Blur backdrop */
+  .backdrop-nav {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .dark .backdrop-nav {
+    background: rgba(15, 15, 15, 0.72);
+  }
+
+  /* AI accent gradient */
+  .ai-gradient {
+    background: radial-gradient(closest-side, rgba(147, 181, 255, 0.18), rgba(147, 181, 255, 0) 70%);
+  }
+}
